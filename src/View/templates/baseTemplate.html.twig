@@ -1,0 +1,147 @@
+{% extends './base.html.twig' %}
+{% block title %}Filmy{% endblock %}
+
+{% block body %}
+<div class="filters filter__container search-b"></div>
+
+<div id="results" class="lists">
+</div>
+
+<div id="paginate">
+</div>
+
+{% endblock %}
+
+{% block afterscripts %}
+<script type="text/javascript">
+	// Funkcja zmieniająca stronę
+	var changePage;
+	// Obecny numer strony (numerowany od 0)
+	var page = 0;
+	// Film od którego chcemy pobrać okręsloną liczbę filmów (np. od 5. filmu do 10m filmu)
+	var offset = 0;
+	// Liczba filmów na stronę
+	var limit = 2;
+	// Jest następna strona?
+	var hasNextPage = false;
+	// Całkowita liczba stron
+	var numberOfPages = 0;
+
+	var array_values = function (element) {
+		let tablica_kluczy_obiektu = Object.keys(element);
+		let funkcja_iterujaca_po_elementach_tablicy = function(i) {
+			return element[i];
+		};
+		return tablica_kluczy_obiektu.map(funkcja_iterujaca_po_elementach_tablicy);
+		//return Object.keys(element).map(function(i) {return element[i]; });
+	};
+
+	var filmBox = new FilmBox($('#results'));
+
+	var filtersArray = [];
+
+	{% if can('year') %}
+		var filterYear = new YearFilter({
+			name: 'year',
+			placeholder: 'Rok wydania',
+			type: 'text'
+		});
+		filtersArray.push(filterYear);
+	{% endif %}
+
+	{% if can('category') %}
+		var filterCategory = new CategoryFilter({
+			name: 'category',
+			multiple: true
+		});
+		filtersArray.push(filterCategory);
+	{% endif %}
+
+	{% if can('title') %}
+		var filterTitle = new TitleFilter({
+			name: 'title',
+			placeholder: 'Tytuł',
+			type: 'text'
+		});
+		filtersArray.push(filterTitle);
+	{% endif %}
+
+	{% if can('director') %}
+		var filterDirector = new DirectorFilter({
+			name: 'director',
+			multiple: false
+		});
+		filtersArray.push(filterDirector);
+	{% endif %}
+
+
+	var pagination = new Pagination({
+		prevLimit: 3,
+		nextLimit: 3,
+		container: $('#paginate')
+	});
+
+	var filters = new Filters({
+		filters: filtersArray,
+		url: 'http://localhost/filmy/lista',
+		filtersElement: $('.filters')
+	});
+
+	filters.init();
+	{% if can('title') %}
+		filterTitle.initSearch('http://localhost/filmy/szukaj-tytulu');
+	{% endif %}
+	SelectFilter.init();
+	InputFilter.init();
+	pagination.render();
+	
+//	$('input#title').focus(function() {
+//		this.placeholder = 'Hello';
+//	});
+	
+//	$('input#title').focusout(function() {
+//		this.placeholder = 'Tytuł';
+//	});
+	
+//	$('#placeholder').keyup(function () {
+//		$('input#title').attr('placeholder', this.value);
+//	});
+
+	var changePage = function(newPage) {
+		page = newPage;
+		offset = limit * page;
+		filters.filter(true);
+	};
+
+	filters.filter(false);
+
+	$('select').select2({
+		containerCss: {
+			"height": "100%"
+		}
+	});
+</script>
+
+<style>
+	#title-results {
+		overflow-y: scroll;
+		position: absolute;
+		top: calc(2.25rem + 2px);
+		z-index: 10;
+		background-color:white;
+		box-shadow: 0 0 0 0.1rem rgba(52, 58, 64, 0.5);
+		width: 91%;
+	}
+
+	.hoverable {
+		color: inherit;
+		padding: 0.3rem;
+	}
+
+	.hoverable:hover {
+		background-color: #dddddd;
+		text-decoration: none;
+		color: inherit;
+	}
+</style>
+{% endblock %}
