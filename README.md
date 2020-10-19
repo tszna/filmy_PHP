@@ -14,7 +14,7 @@ Jest to aplikacja wyświetlająca listę filmów, inspirowana tym co można znal
 <img src="https://i.imgur.com/SzDsNrG.gif" alt="operation in filtering module">
 
 <h4>Instalacja projektu</h4>
-Po pobraniu projektu należy wpisać w terminalu komendę:
+Po pobraniu projektu należy umieścić go w katalogu o nazwie "filmy", a następnie wpisać w terminalu komendę:
 <pre><code>composer install</code></pre>
-Następnie, na podstawie danych podanych w klasie połączenia z bazą danych, stworzyć użytkownika w panelu zarządzania SQL i zaimportować plik SQL w celu wprowadzenia danych do aplikacji.
+W kolejnym kroku, na podstawie danych podanych w klasie połączenia z bazą danych, stworzyć użytkownika w panelu zarządzania SQL i zaimportować plik SQL w celu wprowadzenia danych do aplikacji.
 Następnie uruchomić moduł PHP i MySQL np. w programie xampp. Strona główna aplikacji jest pod adresem: /filmy
